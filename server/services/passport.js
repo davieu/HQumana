@@ -10,10 +10,16 @@ passport.serializeUser((user, done) => {
   done(null, user.id)
 })
 
+// passport.deserializeUser((id, done) => {
+//   console.log(id)
+//   done(null, id)
+// })
+
 passport.deserializeUser((id, done) => {
-  console.log(id)
-  done(null, id)
-})
+  User.findById(id).then(user => {
+    done(null, user);
+  });
+});
 
 passport.use(
   new GoogleStrategy(

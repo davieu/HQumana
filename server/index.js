@@ -6,8 +6,9 @@ const passport = require('passport')
 const keys = require('./config/keys')
 require('./models/User')
 require('./services/passport')
+require('dotenv').config()
 
-mongoose.connect(keys.mongoURI)
+mongoose.connect(keys.mongo_URI)
 
 const app = express()
 
