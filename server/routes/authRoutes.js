@@ -29,5 +29,6 @@ module.exports = app => {
         req.logout();
         //we're utilizing Express' redirect method 
         res.redirect('/');
+        console.log('LOGGED OUT')
     });
 }
