@@ -1,3 +1,4 @@
+import 'materialize-css/dist/css/materialize.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reduxThunk from 'redux-thunk';
@@ -8,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import App from './components/App';
 import reducers from './reducers';
 
-import 'materialize-css/dist/css/materialize.min.css';
+
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
 
