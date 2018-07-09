@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class Header extends Component {
-  
+
     render() {
       return (
-            <div>
-                
-                <div className="text-center">
-                <h1><b><span className="hq-color">HQ</span>umana</b></h1>
-                <p mt-4 className="space-description">A real-time trivia game implementing web sockets.</p>
-                <Link to={'/'} className="link-text"> Home </Link>
-            
-                <Link to={'/questions'} className="link-text"> questions </Link>
-                
-                <Link to={'/winnerPage'} className="link-text"> Winner Page </Link>
-            
-                <Link to={'/QuestionResults'} className="link-text"> Question Results</Link>
+            <div className="container">
+                <div className="row mt-5">
+                  <div className="col-12 text-center text-light">
+                    <h1><b>HQumana</b></h1>
+                    <p className="lead">A real-time trivia game implementing web sockets.</p>
+                    <Link to={'/'} className="link-text"> Home </Link>
+
+                    <Link to={'/questions'} className="link-text"> questions </Link>
+
+                    <Link to={'/QuestionResults'} className="link-text"> Question Results</Link>
+
+                    <Link to={'/winnerPage'} className="link-text"> Winner Page </Link>
+
+                  </div>
                 </div>
             </div>
         )
@@ -24,4 +26,3 @@ class Header extends Component {
 }
 
 export default Header
-  
