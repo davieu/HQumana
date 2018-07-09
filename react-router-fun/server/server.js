@@ -1,38 +1,91 @@
 const express = require('express');
-
-//required sockets.io to work with websockets
-const socket = require('socket.io');
-
-// App setup- created express application. created server.
 const app = express();
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(_dirname, 'client/build')));
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 4000;
+const bodyParser = require('body-parser');
+const fs = require('fs');
+
+let questions = [];
+let currentCorrectUsers = [];
+let Users = [];
+let currentQuestionNum = 1;
+let maxQuestions = 3;
+let lobby = [];
+let currentQuestion = null;
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+fs.readFile(__dirname+"/qmana-questions.json", 'utf8', (err, data) => {
+    if (err) throw err;
+    questions = JSON.parse(data);
+  });
+
+function getNewQuestion() {
+    return questions[Math.floor(Math.random()*questions.length)];
 }
-const PORT = 4000;
-//created server and stored it in the variable
-const server = app.listen(PORT, () => {
-    console.log('Listening to port ' + PORT);
-});
 
-//static files
-app.use(express.static('public'));
+function nextQuestion(socket) {
+    currentCorrectUsers = [];
+    //grab a new question
+    currentQuestion = getNewQuestion()  
+    socket.emit('new-question',(currentQuestion) )
+        
+    //set timer for question- set timer for 10secs. when timer finishes we send question complete
+    var QuestionCountdown = setInterval(function(){
+        //question complete msg will contain who got it right
+        socket.emit('question-complete', {'answer': currentQuestion.answer, 'currentCorrectUsers': currentCorrectUsers})
+        //after sending question complete start another timer. wait 5secs. This timer will be to send next question.
+        var NewQuestionCountdown = setInterval(function(){
+            if (currentQuestionNum < maxQuestions) {
+                currentQuestionNum++
+                //add some logic to tell if you want to ask question or tell if game is over.
+                nextQuestion(socket);
+            }else {
+                //send endgame message
+                socket.emit('gameover', (currentCorrectUsers))
+            }
+            clearInterval(NewQuestionCountdown);
+        }, 5000);
+        clearInterval(QuestionCountdown);
+    }, 10000);
+}
+//num players screenLeft. count array
+//hook up game over-screen
+//lobby- players are waiting to start
+//start game button will be in lobby page
+//
 
-//SETUP socket.io on the frontend and server
-//var io set equal to socket and invoking function and passing in the server we created above
-//socket setup
-let io = socket(server);
-
-//listening for a connection. when connection is made we fire a callback function which is taking in socket
-//and loggin in the console log
-//also logs socket ID, the id is a socket connection. everytime a different user connects they get a 
-//unique socket ID between the client and sserver
-io.on('connection', (socket) => {
 
 
-    console.log('made socket connection', socket.id)
+function onConnection(socket) {
+    console.log('connected', socket.id)
+    socket.on('add-user', (data) => {
+        let newUser = { username: data.username, id: socket.client.id }
+        Users.push(newUser)
+        console.log('sending question');
+        //takes in all logic for handling one funciton
+       
+        //keep track of how many question and how many left. counter for how many questions per game
+        //load json file when server starts
+        nextQuestion(socket);
+    })
 
-    socket.on('disconnect', () => {
-        console.log('disconnected', socket.id)
-    });
+    socket.on('choice', (data) => {
+        if (data.answer === currentQuestion.answer ) {
+            currentCorrectUsers.push(data.id)
+        }
+    })
+}
 
-});
+app.get('/api/users', (request, response) => {
+    return response.send(Users)
+})
+
+io.on('connection', onConnection);
+
+
+http.listen(port, () => console.log('listening on port ' + port));
