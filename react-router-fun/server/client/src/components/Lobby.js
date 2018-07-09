@@ -1,6 +1,27 @@
 import React, { Component } from 'react';
+import { socketConnect } from 'socket.io-react';
 
 class Lobby extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            users: []
+            }
+      }
+  
+      componentDidMount = () => {
+        this.props.socket.on('new-player',(data) => {
+            console.log('new player receiced', this)
+            this.setState({'users': data})
+          })
+      
+      }
+
+
+    startGame = () => {
+            this.props.socket.emit('start-game');
+    }
+// current.map 
 
     render() {
         return (
@@ -10,16 +31,16 @@ class Lobby extends Component {
                 <h2 className="text-center text-light">Lobby</h2>
                   <div className="card shadow mt-4 pt-3 pb-3">
                     <div className="card-body">
-                      <h3>Players in lobby:</h3>
-                    </div>
+                      <h3>Players in lobby: {this.state.users.length} </h3>
+                    </div> 
                   </div>
                 </div>
               </div>
-              <div>emit startgamemessage</div>
+              <button type='button' onClick={() => { this.startGame() }} className="btn btn-primary btn-block mt-5"></button>
           </div>
               
         )
     }
 }
-
-export default Lobby
+// emit start game message
+export default socketConnect(Lobby);

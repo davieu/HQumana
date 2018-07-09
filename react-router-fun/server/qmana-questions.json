@@ -68,23 +68,6 @@
     ]
   },
   {
-    "id": 5,
-    "prompt": "Which liquor is made from the blue agave plant?",
-    "choices": [
-      "Coffee",
-      "Tequila",
-      "Whiskey",
-      "Moonshine"
-    ],
-    "answer": "Tequila",
-    "links": [
-      {
-        "href": "www.google.com",
-        "text": "LMGTFY"
-      }
-    ]
-  },
-  {
     "id": 6,
     "prompt": "Steve Jobs, Steve Wozniak, and Ronald Wayne founded what company in 1976?",
     "choices": [
@@ -111,23 +94,6 @@
       "About 200"
     ],
     "answer": "5280",
-    "links": [
-      {
-        "href": "www.google.com",
-        "text": "LMGTFY"
-      }
-    ]
-  },
-  {
-    "id": 8,
-    "prompt": "Quasimodo is a fictional character from what novel?",
-    "choices": [
-      "The Hunchback of Notre-Dam",
-      "Harry Potter",
-      "Goosebumps",
-      "I don't read"
-    ],
-    "answer": "The Hunchback of Notre-Dam",
     "links": [
       {
         "href": "www.google.com",

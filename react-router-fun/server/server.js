@@ -32,12 +32,12 @@ function nextQuestion(socket) {
     currentCorrectUsers = [];
     //grab a new question
     currentQuestion = getNewQuestion()  
-    socket.emit('new-question',(currentQuestion) )
+    io.emit('new-question',(currentQuestion) )
         
     //set timer for question- set timer for 10secs. when timer finishes we send question complete
     var QuestionCountdown = setInterval(function(){
         //question complete msg will contain who got it right
-        socket.emit('question-complete', {'answer': currentQuestion.answer, 'currentCorrectUsers': currentCorrectUsers})
+        io.emit('question-complete', {'answer': currentQuestion.answer, 'currentCorrectUsers': currentCorrectUsers})
         //after sending question complete start another timer. wait 5secs. This timer will be to send next question.
         var NewQuestionCountdown = setInterval(function(){
             if (currentQuestionNum < maxQuestions) {
@@ -46,7 +46,7 @@ function nextQuestion(socket) {
                 nextQuestion(socket);
             }else {
                 //send endgame message
-                socket.emit('gameover', (currentCorrectUsers))
+                io.emit('gameover', (currentCorrectUsers))
             }
             clearInterval(NewQuestionCountdown);
         }, 5000);
@@ -66,11 +66,14 @@ function onConnection(socket) {
     socket.on('add-user', (data) => {
         let newUser = { username: data.username, id: socket.client.id }
         Users.push(newUser)
+        io.emit('new-player', (Users))
         console.log('sending question');
         //takes in all logic for handling one funciton
-       
         //keep track of how many question and how many left. counter for how many questions per game
         //load json file when server starts
+    })
+
+    socket.on('start-game', (data) => {
         nextQuestion(socket);
     })
 

@@ -44,7 +44,6 @@ class App extends Component {
       console.log('gamover received', this)
       this.setState({'currentCorrectUsers': data})
       this.props.history.push('/winnerPage')
-
     })
 
   }

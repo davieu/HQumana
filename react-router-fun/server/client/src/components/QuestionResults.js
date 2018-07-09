@@ -12,8 +12,7 @@ class QuestionResults extends Component {
                     <div className="card-body">
                       <h3>Correct Answer:</h3>
                       <p className="lead">{this.props.state.currentAnswer}</p>
-                      <h3>Number of players left:</h3>
-                      <p className="lead">{this.props.state.currentCorrectUsers.length}</p>
+                      <h3>Number of players left: {this.props.state.currentCorrectUsers.length}</h3>
                     </div>
                   </div>
                 </div>
