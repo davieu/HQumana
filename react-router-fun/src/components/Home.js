@@ -10,7 +10,7 @@ class Home extends Component {
                   <div className="card shadow pt-3 pb-3">
                     <div className="card-body">
                       <h1 className="text-center mb-4">Lets get started!</h1>
-                      <form>
+                      <form onSubmit={this.submitHandler}>
                       <input placeholder="Username" type="text" name="username1" className="username" required />
                                 <label className="mb-5" for="username1" >Username Required</label>
                       <button className="btn btn-primary btn-block mt-5" type="submit">Sign In</button>
